@@ -1,0 +1,20 @@
+// 
+
+
+
+import multer from "multer";
+import path from "path";
+
+// store file in temp folder
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "temp/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage });
+
+export default upload;

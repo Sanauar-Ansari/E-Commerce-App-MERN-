@@ -35,7 +35,3 @@ export const getProducts =async(req,res)=>{
     }
 }
 
-// for indivisual product
-export const getProductById =async(req,res)=>{
- 
-}

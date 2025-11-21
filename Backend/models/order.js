@@ -19,11 +19,16 @@ const orderSchema = new mongoose.Schema({
     city: String,
     pincode: String
   },
-  totalAmount: Number,
+  totalAmount:{type:Number},
+  //These two will help to find all placed order who's payment="success" OR status="placed" 
+  status: { type: String, default: "created" },  // created, paid, failed
+  razorpayOrderId:{type:String},   // razorpay order id (r_order_xxx)
+  razorpayPaymentId: {type:String}, // razorpay payment id after successful pay
+  razorpaySignature: {type:String}, // signature returned by razorpay (optional store)
   createdAt: { type: Date, default: Date.now }
 });
 
 
 
-const Order=mongoose.model('order',orderSchema);  
+const Order=mongoose.model('orderabc',orderSchema);  
 export default Order;

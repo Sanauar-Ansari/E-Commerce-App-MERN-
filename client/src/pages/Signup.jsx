@@ -15,37 +15,24 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async(e) => {
+
+  const handleSubmit=async(e)=>{
     e.preventDefault();
-    setLoading(true); //  Start loading
     try {
-        const res=await axios.post(`http://localhost:3000/api/user/signup`,
-        formData,
-      { withCredentials: true }
-        );
-        // console.log(res.data,"res.data")
-        if (res?.data?.success) {
-        // localStorage.setItem("token", res.data.token);
+      const res=await axios.post("http://localhost:3000/api/user/signup", formData, { withCredentials: true })
+      console.log(res,"response")
+      if(res?.status==201){
         alert(res?.data?.message);
-        // window.location.reload();
         setFormData({ name: "", email: "", password: "" })
         navigate("/login")
-      } else {
-        alert(res?.data?.message || "Signup failed");
       }
-
     } catch (error) {
-           console.log(error.response);
-      if (error.response?.data?.message) {
-        alert(error.response.data.message);
-      } else {
-        alert("Something went wrong. Please try again.");
-      }
-    } finally{
-      setLoading(false); //  Stop loading after response
+      alert(error?.response?.data?.message);
+      console.log(error,"Error while creating new users at signup page.");
     }
+  }
 
-  };
+
   return (
    <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <form

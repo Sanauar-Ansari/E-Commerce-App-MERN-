@@ -9,3 +9,8 @@ mongoose
   })
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
+
+
+  // razorpay details
+  // test API key= rzp_test_RhuhcDCND55vs5
+  // key secret- ZD4e2WLNEXMwOqkuUo58pwen

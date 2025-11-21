@@ -4,28 +4,27 @@ import Banner from '../components/Banner'
 import axios from "axios";
 import { CartContext } from '../context/CartContext';
 import image from "../assets/mainImage.png"
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 const Home = () => {
 
-        const token = localStorage.getItem("token");
+        // const token = localStorage.getItem("token");
         const [product,setProduct]=useState([]);
          const { addToCart } = useContext(CartContext);
 
       useEffect(()=>{
 
         const fetchProduct=async()=>{
-          const res=await axios.get("http://localhost:3000/api/product/fetch-product",{
-              headers: { Authorization: `Bearer ${token}` }
-          });
+          const res=await axios.get("http://localhost:3000/api/product/fetch-product", {withCredentials: true})
           setProduct(res?.data?.products)
         }
       fetchProduct();
     },[])
   return (
     <>
+     {/* <Navbar /> */}
     <Banner/>
-    {/* {console.log(product)} */}
-
 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
   {product.map((p,index) => (
     <div
@@ -63,6 +62,8 @@ const Home = () => {
     </div>
   ))}
 </div>
+
+<Footer/>
 
 
      </>

@@ -10,6 +10,11 @@ import Signup from './pages/Signup';
 import ProtectedRoute from '../ProtectedRoute';
 import Cart from './pages/Cart';
 import ProductCard from './components/ProductCard';
+import Checkout from './pages/Checkout';
+import PaymentSuccess from './pages/PaymentSuccess';
+import AllProductReport from './pages/AllProductReport';
+import OrderedReportForUser from './pages/OrderedReportForUser';
+import OrederdReportForAllUser from './pages/OrederdReportForAllUser';
 function App() {
   const token = localStorage.getItem("token");
 
@@ -32,11 +37,14 @@ function App() {
         <Route path='/login' element={<Navigate to="/" />}/>
         <Route path='/signup' element={<Navigate to="/" />}/>
         <Route path='/' element={<Home/>}/>
-         <Route path='/product' element={<ProductCard/>}/>
+        <Route path='/product' element={<ProductCard/>}/>
         <Route path='/cart' element={<Cart/>}/>
-
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/report-all-product" element={<AllProductReport />} />
+        <Route path="/report-ordered-user" element={<OrderedReportForUser />} />
+        <Route path="/report-ordered-all" element={<OrederdReportForAllUser />} />
+         <Route path="/payment-success" element={<PaymentSuccess />} />
       </Route>
-
     </Routes>
     </BrowserRouter>
     </>

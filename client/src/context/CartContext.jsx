@@ -13,10 +13,10 @@ export const CartProvider = ({ children }) => {
 
   const loadCartFromDB = async () => {
     try {
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
       const res = await axios.get(
-        "http://localhost:3000/api/cart/get-cart",
-        { headers: { Authorization: `Bearer ${token}` } }
+        "http://localhost:3000/api/cart/get-cart",    { withCredentials: true }
+        // { headers: { Authorization: `Bearer ${token}` } }
       );
       // console.log(res,"response at cart ")
       setCart(res.data);
@@ -25,13 +25,20 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+
+  // console.log(cart.length,"iiiiiiiiiiiiiiii")
   const addToCart = async (productId) => {
     try {
-         const token = localStorage.getItem("token");
+        //  const token = localStorage.getItem("token");
     const res=await axios.post("http://localhost:3000/api/cart/add-to-cart",
-        { productId },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { productId },    { withCredentials: true }
+        // { headers: { Authorization: `Bearer ${token}` } }
       );
+
+      // if(cart.length>=4){
+      //  return alert("Cant added more");
+      // }
+
       loadCartFromDB();
     } catch (err) {
       console.log("Add to cart failed", err);
@@ -40,11 +47,11 @@ export const CartProvider = ({ children }) => {
 
   const updateQty = async (productId, quantity) => {
     try {
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
       await axios.post(
         "http://localhost:3000/api/cart/update-qty",
-        { productId, quantity },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { productId, quantity },    { withCredentials: true }
+        // { headers: { Authorization: `Bearer ${token}` } }
       );
       loadCartFromDB();
     } catch (err) {
@@ -54,11 +61,11 @@ export const CartProvider = ({ children }) => {
 
   const removeFromCart = async (productId) => {
     try {
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
       await axios.post(
         "http://localhost:3000/api/cart/remove-from-cart",
-        { productId },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { productId },    { withCredentials: true }
+        // { headers: { Authorization: `Bearer ${token}` } }
       );
       loadCartFromDB();
     } catch (err) {

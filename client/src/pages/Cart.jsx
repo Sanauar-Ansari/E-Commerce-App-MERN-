@@ -2,8 +2,10 @@
 import { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
+  const navigate=useNavigate();
   const { cart, updateQty, removeFromCart } = useContext(CartContext);
 
   // Address state
@@ -20,31 +22,17 @@ const Cart = () => {
     setAddress({ ...address, [e.target.name]: e.target.value });
   };
 
-  const total = cart.reduce(
-    (sum, item) => sum + item?.productId?.price * item.quantity,
-    0
-  );
+  const totalAmount = cart.reduce((sum, item) => sum + item?.productId?.offerPrice * item.quantity,0);
 
   console.log(cart,"carttttt")
 
   // PLACE ORDER FUNCTION
   const placeOrder = async () => {
     try {
-      const token = localStorage.getItem("token");
-
       const res = await axios.post(
-        "http://localhost:3000/api/order/place-order",
-        {
-          address,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
+        "http://localhost:3000/api/payment/create-order",{address},{withCredentials: true });
       alert("Order placed successfully!");
-
-      window.location.reload();
+      console.log(res)
     } catch (err) {
       console.log(err.response?.data);
       alert("Order failed");
@@ -52,6 +40,8 @@ const Cart = () => {
   };
 
   return (
+    <>
+   
     <div style={{ display: "flex", gap: "20px", padding: "20px" }}>
       {/* LEFT SIDE — CART ITEMS */}
       <div style={{ width: "65%" }}>
@@ -61,9 +51,9 @@ const Cart = () => {
 
         {cart.map((i) => (
           <div key={i?.productId?._id} className="flex justify-between items-center h-25 border p-2 mb-2 rounded-xl ">
-            <div className="w-15"><img src={i.productId.image}/></div>
+            <div className="w-12"><img src={i?.productId?.image}/></div>
             <h5>{i?.productId?.name}</h5>
-            <p>Price: ₹{i?.productId?.price}</p>
+            <p>Price: ₹{i?.productId?.offerPrice}</p>
 
             <div style={styles.qtyBox}>
               <button
@@ -88,89 +78,22 @@ const Cart = () => {
           </div>
         ))}
 
-        <h2>{`Total: ₹ ${total}/-`}</h2>
+        <h2>{`Total: ₹ ${totalAmount}/-`}</h2>
 
-
-      </div>
-
-
-
-{
-  cart.length===0?"":(
-    <>
-      {/* ADDRESS FORM */}
-      <div style={styles.addressBox}>
-        <h2>Delivery Address</h2>
-
-        <input
-          name="fullName"
-          placeholder="Full Name"
-          value={address.fullName}
-          onChange={handleAddressChange}
-          style={styles.input}
-        />
-
-        <input
-          name="mobile"
-          placeholder="Mobile Number"
-          value={address.mobile}
-          onChange={handleAddressChange}
-          style={styles.input}
-        />
-
-        <input
-          name="houseNo"
-          placeholder="House No"
-          value={address.houseNo}
-          onChange={handleAddressChange}
-          style={styles.input}
-        />
-
-        <input
-          name="street"
-          placeholder="Street"
-          value={address.street}
-          onChange={handleAddressChange}
-          style={styles.input}
-        />
-
-        <input
-          name="city"
-          placeholder="City"
-          value={address.city}
-          onChange={handleAddressChange}
-          style={styles.input}
-        />
-
-        <input
-          name="pincode"
-          placeholder="Pincode"
-          value={address.pincode}
-          onChange={handleAddressChange}
-          style={styles.input}
-        />
-
-        <button onClick={placeOrder} style={styles.orderBtn}>
-          Place Order
+   <button onClick={()=>navigate("/checkout")} style={styles.orderBtn}>
+          Proceed to Buy
         </button>
       </div>
-    </>
-  )
-}
+
     </div>
+
+    {/* <div className="flex align-center justify-center"><button>Playment</button></div> */}
+     </>
   );
 };
 
 const styles = {
-  // item: {
-  //   border: "1px solid #ddd",
-  //   padding: 10,
-  //   borderRadius: 6,
-  //   marginBottom: 10,
-  //   display: "flex",
-  //   justifyContent: "space-between",
-  //   alignItems: "center",
-  // },
+
   qtyBox: { display: "flex", gap: 10, alignItems: "center" },
   removeBtn: {
     background: "red",

@@ -9,9 +9,13 @@ export const addToCart = async (req, res) => {
     const user = await User.findById(userId);
 
     const item = user.cart.find(i => i.productId == productId);
-
-    if (item) item.quantity += 1;
-    else user.cart.push({ productId, quantity: 1 });
+    // if product is alredy exist then just increase the count
+    if (item){
+      item.quantity += 1;
+    } else{
+    
+      user.cart.push({ productId, quantity: 1 });
+    } 
 
     await user.save();
 
@@ -57,7 +61,9 @@ export const updateQuantity = async (req, res) => {
     const user = await User.findById(req.user.id);
 
     const item = user.cart.find(i => i.productId == productId);
-    if (item) item.quantity = quantity;
+    if (item){
+     item.quantity = quantity;
+    } 
 
     await user.save();
 

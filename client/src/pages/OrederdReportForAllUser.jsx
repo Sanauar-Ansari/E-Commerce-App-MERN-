@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react'
 
 const OrederdReportForAllUser = () => {
       const [product,setProduct]=useState([]);
+  const mainURL="https://e-commerce-app-mern-1.onrender.com";
 
       useEffect(()=>{
         const fetchProduct=async()=>{
-          const res=await axios.get("http://localhost:3000/api/report/get-all-placed-order-withou-user-report", {withCredentials: true})
+          const res=await axios.get(`${mainURL}/api/report/get-all-placed-order-withou-user-report`, {withCredentials: true})
         //   console.log(res,"poooo")
           setProduct(res?.data?.product)
         }

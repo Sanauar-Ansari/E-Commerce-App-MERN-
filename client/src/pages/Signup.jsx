@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 const Signup = () => {
     const navigate=useNavigate();
     const [loading,setLoading]=useState(false)
+      const mainURL="https://e-commerce-app-mern-1.onrender.com";
+
       const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -19,7 +21,7 @@ const Signup = () => {
   const handleSubmit=async(e)=>{
     e.preventDefault();
     try {
-      const res=await axios.post("http://localhost:3000/api/user/signup", formData, { withCredentials: true })
+      const res=await axios.post(`${mainURL}/api/user/signup`, formData, { withCredentials: true })
       console.log(res,"response")
       if(res?.status==201){
         alert(res?.data?.message);

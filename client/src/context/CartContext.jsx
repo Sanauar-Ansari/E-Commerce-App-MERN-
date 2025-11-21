@@ -11,11 +11,13 @@ export const CartProvider = ({ children }) => {
     loadCartFromDB();
   }, []);
 
+  const mainURL="https://e-commerce-app-mern-1.onrender.com";
+
   const loadCartFromDB = async () => {
     try {
       // const token = localStorage.getItem("token");
       const res = await axios.get(
-        "http://localhost:3000/api/cart/get-cart",    { withCredentials: true }
+        `${mainURL}/api/cart/get-cart`,    { withCredentials: true }
         // { headers: { Authorization: `Bearer ${token}` } }
       );
       // console.log(res,"response at cart ")
@@ -30,7 +32,7 @@ export const CartProvider = ({ children }) => {
   const addToCart = async (productId) => {
     try {
         //  const token = localStorage.getItem("token");
-    const res=await axios.post("http://localhost:3000/api/cart/add-to-cart",
+    const res=await axios.post(`${mainURL}/api/cart/add-to-cart`,
         { productId },    { withCredentials: true }
         // { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -49,7 +51,7 @@ export const CartProvider = ({ children }) => {
     try {
       // const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:3000/api/cart/update-qty",
+        `${mainURL}/api/cart/update-qty`,
         { productId, quantity },    { withCredentials: true }
         // { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -63,7 +65,7 @@ export const CartProvider = ({ children }) => {
     try {
       // const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:3000/api/cart/remove-from-cart",
+        `${mainURL}/api/cart/remove-from-cart`,
         { productId },    { withCredentials: true }
         // { headers: { Authorization: `Bearer ${token}` } }
       );

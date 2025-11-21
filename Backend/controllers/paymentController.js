@@ -107,7 +107,64 @@ try {
 } catch (error) {
       res.status(500).json({ success: false, message: "Verification error", error });  
 }
-
-
-
 }
+
+
+
+
+export const paymentWebhook = async (req, res) => {
+  try {
+    const webhookSecret = "sanauar_ansari"; // choose any strong string
+
+    // 1) Verify Razorpay Webhook Signature
+    const shasum = crypto.createHmac("sha256", webhookSecret);
+    shasum.update(JSON.stringify(req.body));
+    const digest = shasum.digest("hex");
+
+    const razorpaySignature = req.headers["x-razorpay-signature"];
+
+    if (digest !== razorpaySignature) {
+      return res.status(400).json({ success: false, message: "Invalid webhook signature" });
+    }
+
+    const event = req.body.event;
+    const payload = req.body.payload;
+
+    console.log("Webhook event received:", event);
+
+    // 2) Handle PAYMENT FAILED
+    if (event === "payment.failed") {
+      const orderId = payload.payment.entity.order_id;
+
+      await Order.findOneAndUpdate(
+        { razorpayOrderId: orderId },
+        { status: "failed" },
+        { new: true }
+      );
+
+      console.log("Updated failed order:", orderId);
+    }
+
+    // 3) Handle PAYMENT CAPTURED (success)
+    if (event === "payment.captured") {
+      const orderId = payload.payment.entity.order_id;
+      const paymentId = payload.payment.entity.id;
+
+      await Order.findOneAndUpdate(
+        { razorpayOrderId: orderId },
+        {
+          status: "paid",
+          razorpayPaymentId: paymentId
+        },
+        { new: true }
+      );
+
+      console.log("Updated successful order:", orderId);
+    }
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.log("Webhook Error:", error);
+    res.status(500).json({ success: false });
+  }
+};

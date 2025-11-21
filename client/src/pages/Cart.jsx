@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 const Cart = () => {
   const navigate=useNavigate();
   const { cart, updateQty, removeFromCart } = useContext(CartContext);
+    const mainURL="https://e-commerce-app-mern-1.onrender.com";
+
 
   // Address state
   const [address, setAddress] = useState({
@@ -30,7 +32,7 @@ const Cart = () => {
   const placeOrder = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/payment/create-order",{address},{withCredentials: true });
+        `${mainURL}/api/payment/create-order`,{address},{withCredentials: true });
       alert("Order placed successfully!");
       console.log(res)
     } catch (err) {

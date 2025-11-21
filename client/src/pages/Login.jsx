@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false); //  Loading state
+  const mainURL="https://e-commerce-app-mern-1.onrender.com";
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,7 +18,7 @@ const Login = () => {
     // You can add your login logic here
      try {
       const res = await axios.post(
-        `http://localhost:3000/api/user/signin`,
+        `${mainURL}/api/user/signin`,
         formData,
       { withCredentials: true }
       );

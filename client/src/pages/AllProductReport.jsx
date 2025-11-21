@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react'
 
 const AllProductReport = () => {
     const [product,setProduct]=useState([]);
+  const mainURL="https://e-commerce-app-mern-1.onrender.com";
 
       useEffect(()=>{
         const fetchProduct=async()=>{
-          const res=await axios.get("http://localhost:3000/api/product/fetch-product", {withCredentials: true})
+          const res=await axios.get(`${mainURL}/api/product/fetch-product`, {withCredentials: true})
           setProduct(res?.data?.products)
         }
       fetchProduct();

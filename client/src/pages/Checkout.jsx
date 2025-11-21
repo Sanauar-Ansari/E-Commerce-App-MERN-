@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const Checkout = () => {
   const { cart } = useContext(CartContext);
   const navigate=useNavigate();
+  const mainURL="https://e-commerce-app-mern-1.onrender.com";
 
     // Address state
   const [address, setAddress] = useState({
@@ -44,7 +45,7 @@ const Checkout = () => {
     try {
       // Create order in backend
       const  data = await axios.post(
-        "http://localhost:3000/api/payment/create-order",
+        `${mainURL}/api/payment/create-order`,
         {address},
         { withCredentials: true }
       );
@@ -60,7 +61,7 @@ const Checkout = () => {
         handler: async function (response) {
             console.log(response,"Razorpay response in handler")
           const verifyRes = await axios.post(
-            "http://localhost:3000/api/payment/verify-payment",
+            `${mainURL}/api/payment/verify-payment`,
             response,
             { withCredentials: true }
           );

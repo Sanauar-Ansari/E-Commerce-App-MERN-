@@ -3,6 +3,8 @@ import Razorpay from "razorpay"
 import Order from "../models/order.js";
 import User from "../models/user.js";
 import crypto from "crypto";
+
+
 export const createRazorpayOrder=async(req,res)=>{
     var razorpay = new Razorpay({ key_id: 'rzp_test_RhuhcDCND55vs5', key_secret: 'ZD4e2WLNEXMwOqkuUo58pwen' })
 try {
@@ -16,10 +18,17 @@ try {
       return res.status(400).json({ message: "Cart is empty" });
     }
       // Correct calculation
-    const totalAmount = user.cart.reduce(
-      (sum, item) => sum + item.productId.offerPrice * item.quantity,
-      0
-    );
+      console.log(user.cart,"user cart")
+
+    //   const totalCalculator=()=>{
+    //     let sum=0;
+    //     for(let i=0;i<user.cart.length;i++){
+    //       sum=sum+(user.cart[i].productId.offerPrice*user.cart[i].quantity)
+    //     }
+    //      return sum;
+    //   }
+    // const finalPrice=totalCalculator();
+    const totalAmount = user.cart.reduce((sum, item) => sum + item.productId.offerPrice * item.quantity,0);
 
         // 1) Create new order entry in MongoDB with status = "created"
     const newOrder = await Order.create({
@@ -29,13 +38,10 @@ try {
       totalAmount,
       status: "created"
     });
-
-    // Empty cart after placing order
-    // user.cart = [];
     await user.save();
 
 
-     // 2) Initialize Razorpay instance
+     // 2) Initialize Razorpay instance ===> this will allow you to communicate with razorpay
     var razorpay = new Razorpay({ key_id: 'rzp_test_RhuhcDCND55vs5', key_secret: 'ZD4e2WLNEXMwOqkuUo58pwen' })
 
       // 3) Create Razorpay Order
@@ -46,9 +52,10 @@ try {
     };
 
     const rzpOrder = await razorpay.orders.create(options);
-
+    console.log(rzpOrder,"razorpay order id generated");
       // 4) Save razorpayOrderId inside database
     newOrder.razorpayOrderId = rzpOrder.id;
+    // finally order_id saved in database
     await newOrder.save();
 
     res.status(200).json({

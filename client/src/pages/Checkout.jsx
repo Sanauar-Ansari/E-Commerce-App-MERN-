@@ -41,22 +41,14 @@ const Checkout = () => {
   const handlePayment = async () => {
     const loaded = await loadRazorpay();
     if (!loaded) return alert("Razorpay failed to load");
-
     try {
-
-        // const res=axios.post("http://localhost:3000/api/payment/create-order",{totalAmount},{withCredentials: true });
-        // console.log((await res).data,"response at checkout page")
       // Create order in backend
       const  data = await axios.post(
         "http://localhost:3000/api/payment/create-order",
-        // { cart, address, totalAmount },
         {address},
         { withCredentials: true }
       );
-
       console.log(data,"response amount")
-
-
       const options = {
         key:"rzp_test_RhuhcDCND55vs5",
         amount: data?.data?.amount*100,

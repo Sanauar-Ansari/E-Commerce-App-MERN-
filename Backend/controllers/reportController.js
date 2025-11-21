@@ -28,8 +28,9 @@ export const getAllPlacedOrderReport=async(req,res)=>{
 
 export const getAllPlacedOrderReportWithouUser=async(req,res)=>{
    try {
+      // created, paid, failed
     // if there is not status:"placed" then we can not find for all users. 
-    const product=await Order.find({status:"placed"}).populate("items.productId").populate("userId","name  email");
+    const product=await Order.find({status:{$in:["created", "paid", "failed"]}}).populate("items.productId").populate("userId","name  email");
     res.status(200).json({message:"List of all placed order found",product,success:true})
    } catch (error) {
     res.status(500).json({message:"Error to find all placed order",error,success:false})

@@ -15,7 +15,16 @@ const OrderedReportForUser = () => {
 
     console.log(product,"ppppppp")
   return (
+
+
     <div className="overflow-x-auto w-full">
+
+        <div className='flex justify-between mb-3 mt-4'>
+        <h4>Placed Order Report Of Logined-In User</h4>
+         <div class="flex flex-wrap items-center justify-center gap-5 md:gap-12">
+          <button type="button" class="px-6 py-2 active:scale-95 transition bg-blue-500 rounded text-white text-sm font-medium">Generate Dox. Report</button>
+         </div>
+        </div>
       <table className="min-w-full border border-gray-300">
         <thead>
           <tr className="bg-gray-100 text-left">

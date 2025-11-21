@@ -17,7 +17,11 @@ const port =3000;
 
 
 // CORS
-const allowedOrigins = 'https://e-commerce-app-mern-1.onrender.com';
+// const allowedOrigins = 'https://e-commerce-app-mern-1.onrender.com || http://localhost:5173';
+const allowedOrigins = [
+  'https://e-commerce-app-mern-1.onrender.com',
+  'http://localhost:5173'
+];
 app.use(cors({origin:allowedOrigins, credentials: true}))
 // when Frontend send data in json then we have to parse it 
 app.use(express.json());

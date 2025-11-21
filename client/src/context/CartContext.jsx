@@ -1,5 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
+// import dotenv from "dotenv"
+// dotenv.config();
 
 export const CartContext = createContext();
 
@@ -11,14 +13,10 @@ export const CartProvider = ({ children }) => {
     loadCartFromDB();
   }, []);
 
-  const mainURL="https://e-commerce-app-mern-1.onrender.com";
-
   const loadCartFromDB = async () => {
     try {
-      // const token = localStorage.getItem("token");
       const res = await axios.get(
-        `${mainURL}/api/cart/get-cart`,    { withCredentials: true }
-        // { headers: { Authorization: `Bearer ${token}` } }
+        `${import.meta.env.VITE_BACKEND_URL}/api/cart/get-cart`,    { withCredentials: true }
       );
       // console.log(res,"response at cart ")
       setCart(res.data);
@@ -31,10 +29,8 @@ export const CartProvider = ({ children }) => {
   // console.log(cart.length,"iiiiiiiiiiiiiiii")
   const addToCart = async (productId) => {
     try {
-        //  const token = localStorage.getItem("token");
-    const res=await axios.post(`${mainURL}/api/cart/add-to-cart`,
+    const res=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/cart/add-to-cart`,
         { productId },    { withCredentials: true }
-        // { headers: { Authorization: `Bearer ${token}` } }
       );
 
       // if(cart.length>=4){
@@ -49,11 +45,9 @@ export const CartProvider = ({ children }) => {
 
   const updateQty = async (productId, quantity) => {
     try {
-      // const token = localStorage.getItem("token");
       await axios.post(
-        `${mainURL}/api/cart/update-qty`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/cart/update-qty`,
         { productId, quantity },    { withCredentials: true }
-        // { headers: { Authorization: `Bearer ${token}` } }
       );
       loadCartFromDB();
     } catch (err) {
@@ -63,11 +57,9 @@ export const CartProvider = ({ children }) => {
 
   const removeFromCart = async (productId) => {
     try {
-      // const token = localStorage.getItem("token");
       await axios.post(
-        `${mainURL}/api/cart/remove-from-cart`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/cart/remove-from-cart`,
         { productId },    { withCredentials: true }
-        // { headers: { Authorization: `Bearer ${token}` } }
       );
       loadCartFromDB();
     } catch (err) {

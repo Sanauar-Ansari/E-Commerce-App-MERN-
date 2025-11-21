@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-
+// import dotenv from "dotenv";
+// dotenv.config();
 const Signup = () => {
     const navigate=useNavigate();
     const [loading,setLoading]=useState(false)
-      const mainURL="https://e-commerce-app-mern-1.onrender.com";
 
       const [formData, setFormData] = useState({
     name: "",
@@ -21,7 +21,7 @@ const Signup = () => {
   const handleSubmit=async(e)=>{
     e.preventDefault();
     try {
-      const res=await axios.post(`${mainURL}/api/user/signup`, formData, { withCredentials: true })
+      const res=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/user/signup`, formData, { withCredentials: true })
       console.log(res,"response")
       if(res?.status==201){
         alert(res?.data?.message);

@@ -1,12 +1,11 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+// import dotenv from "dotenv";
+// dotenv.config();
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false); //  Loading state
-  const mainURL="https://e-commerce-app-mern-1.onrender.com";
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -18,7 +17,7 @@ const Login = () => {
     // You can add your login logic here
      try {
       const res = await axios.post(
-        `${mainURL}/api/user/signin`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/user/signin`,
         formData,
       { withCredentials: true }
       );

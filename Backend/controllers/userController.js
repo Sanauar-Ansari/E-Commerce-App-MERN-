@@ -28,13 +28,7 @@ try {
         return res.status(404).json({message:"User with this emial is not found!"})
     }
     if(password===existingUser.password){
-    const token= jwt.sign({id:existingUser._id,email:existingUser.email,password:existingUser.password},"sanauaransari",{expiresIn:"6h"});
-    //     res.cookie("token", token, {
-    //   httpOnly: true,      // prevent JS access → secure
-    //   secure: false,       // true only on production + https
-    //   sameSite: "lax",     // allow frontend on different port
-    //   maxAge: 1000 * 60 * 60 * 6, // 6 hours
-    // });
+    const token= jwt.sign({id:existingUser._id,email:existingUser.email,password:existingUser.password},`${process.env.JWT_SECRET}`,{expiresIn:"6h"});
     res.cookie('token',token,{httpOnly:true});
     return res.status(200).json({message:"SignIn successful",token,success:true })
     }else{

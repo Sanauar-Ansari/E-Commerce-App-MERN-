@@ -3,13 +3,11 @@ import { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+// import dotenv from "dotenv";
+// dotenv.config();
 const Cart = () => {
   const navigate=useNavigate();
   const { cart, updateQty, removeFromCart } = useContext(CartContext);
-    const mainURL="https://e-commerce-app-mern-1.onrender.com";
-
-
   // Address state
   const [address, setAddress] = useState({
     fullName: "",
@@ -32,7 +30,7 @@ const Cart = () => {
   const placeOrder = async () => {
     try {
       const res = await axios.post(
-        `${mainURL}/api/payment/create-order`,{address},{withCredentials: true });
+        `${import.meta.env.VITE_BACKEND_URL}/api/payment/create-order`,{address},{withCredentials: true });
       alert("Order placed successfully!");
       console.log(res)
     } catch (err) {

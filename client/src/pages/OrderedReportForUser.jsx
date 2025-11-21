@@ -1,13 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-
+// import dotenv from "dotenv";
+// dotenv.config();
 const OrderedReportForUser = () => {
       const [product,setProduct]=useState([]);
-  const mainURL="https://e-commerce-app-mern-1.onrender.com";
 
       useEffect(()=>{
         const fetchProduct=async()=>{
-          const res=await axios.get(`${mainURL}/api/report/get-all-placed-order-report`, {withCredentials: true})
+          const res=await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/report/get-all-placed-order-report`, {withCredentials: true})
         //   console.log(res,"poooo")
           setProduct(res?.data?.product)
         }

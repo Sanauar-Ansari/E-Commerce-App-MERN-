@@ -2,12 +2,11 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import { CartContext } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
-
+// import dotenv from "dotenv";
+// dotenv.config();
 const Checkout = () => {
   const { cart } = useContext(CartContext);
   const navigate=useNavigate();
-  const mainURL="https://e-commerce-app-mern-1.onrender.com";
-
     // Address state
   const [address, setAddress] = useState({
     fullName: "",
@@ -45,7 +44,7 @@ const Checkout = () => {
     try {
       // Create order in backend
       const  data = await axios.post(
-        `${mainURL}/api/payment/create-order`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/payment/create-order`,
         {address},
         { withCredentials: true }
       );
@@ -61,7 +60,7 @@ const Checkout = () => {
         handler: async function (response) {
             console.log(response,"Razorpay response in handler")
           const verifyRes = await axios.post(
-            `${mainURL}/api/payment/verify-payment`,
+            `${import.meta.env.VITE_BACKEND_URL}/api/payment/verify-payment`,
             response,
             { withCredentials: true }
           );

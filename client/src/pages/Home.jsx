@@ -6,19 +6,17 @@ import { CartContext } from '../context/CartContext';
 import image from "../assets/mainImage.png"
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-
+// import dotenv from "dotenv";
+// dotenv.config();
 const Home = () => {
 
         // const token = localStorage.getItem("token");
         const [product,setProduct]=useState([]);
          const { addToCart } = useContext(CartContext);
-           const mainURL="https://e-commerce-app-mern-1.onrender.com";
-
-
       useEffect(()=>{
 
         const fetchProduct=async()=>{
-          const res=await axios.get(`${mainURL}/api/product/fetch-product`, {withCredentials: true})
+          const res=await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/product/fetch-product`, {withCredentials: true})
           setProduct(res?.data?.products)
         }
       fetchProduct();
@@ -66,8 +64,6 @@ const Home = () => {
 </div>
 
 <Footer/>
-
-
      </>
   )
 }

@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
+// const url ="mongodb+srv://sanauaransari99:LyNvwxdz2qhDazrP@cluster0.alykwsb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const url =`mongodb+srv://${process.env.MONGODB_URL}.alykwsb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
-const url =
-  "mongodb+srv://sanauaransari99:LyNvwxdz2qhDazrP@cluster0.alykwsb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 mongoose
   .connect(url, {
     useNewUrlParser: true,

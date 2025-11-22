@@ -3,7 +3,8 @@ import Razorpay from "razorpay"
 import Order from "../models/order.js";
 import User from "../models/user.js";
 import crypto from "crypto";
-
+// import dotenv from "dotenv";
+// dotenv.config();
 
 export const createRazorpayOrder=async(req,res)=>{
     var razorpay = new Razorpay({ key_id: 'rzp_test_RhuhcDCND55vs5', key_secret: 'ZD4e2WLNEXMwOqkuUo58pwen' })
@@ -75,13 +76,13 @@ try {
 
 export const verifyPayment=async(req,res)=>{
 try {
-    console.log(req.user.id,"iddddddddd");
+    // console.log(req.user.id,"iddddddddd");
      const user = await User.findById(req.user.id).populate("cart.productId");
     const {razorpay_order_id,razorpay_payment_id,razorpay_signature} = req.body;
     console.log("razorpay_order_id", razorpay_order_id,razorpay_payment_id,razorpay_signature)
     // 1) Generate expected signature
     const sign = crypto
-      .createHmac("sha256","ZD4e2WLNEXMwOqkuUo58pwen")
+      .createHmac("sha256",'ZD4e2WLNEXMwOqkuUo58pwen')
       .update(razorpay_order_id + "|" + razorpay_payment_id)
       .digest("hex");
 
@@ -112,59 +113,59 @@ try {
 
 
 
-export const paymentWebhook = async (req, res) => {
-  try {
-    const webhookSecret = "sanauar_ansari"; // choose any strong string
+// export const paymentWebhook = async (req, res) => {
+//   try {
+//     const webhookSecret = "sanauar_ansari"; // choose any strong string
 
-    // 1) Verify Razorpay Webhook Signature
-    const shasum = crypto.createHmac("sha256", webhookSecret);
-    shasum.update(JSON.stringify(req.body));
-    const digest = shasum.digest("hex");
+//     // 1) Verify Razorpay Webhook Signature
+//     const shasum = crypto.createHmac("sha256", webhookSecret);
+//     shasum.update(JSON.stringify(req.body));
+//     const digest = shasum.digest("hex");
 
-    const razorpaySignature = req.headers["x-razorpay-signature"];
+//     const razorpaySignature = req.headers["x-razorpay-signature"];
 
-    if (digest !== razorpaySignature) {
-      return res.status(400).json({ success: false, message: "Invalid webhook signature" });
-    }
+//     if (digest !== razorpaySignature) {
+//       return res.status(400).json({ success: false, message: "Invalid webhook signature" });
+//     }
 
-    const event = req.body.event;
-    const payload = req.body.payload;
+//     const event = req.body.event;
+//     const payload = req.body.payload;
 
-    console.log("Webhook event received:", event);
+//     console.log("Webhook event received:", event);
 
-    // 2) Handle PAYMENT FAILED
-    if (event === "payment.failed") {
-      const orderId = payload.payment.entity.order_id;
+//     // 2) Handle PAYMENT FAILED
+//     if (event === "payment.failed") {
+//       const orderId = payload.payment.entity.order_id;
 
-      await Order.findOneAndUpdate(
-        { razorpayOrderId: orderId },
-        { status: "failed" },
-        { new: true }
-      );
+//       await Order.findOneAndUpdate(
+//         { razorpayOrderId: orderId },
+//         { status: "failed" },
+//         { new: true }
+//       );
 
-      console.log("Updated failed order:", orderId);
-    }
+//       console.log("Updated failed order:", orderId);
+//     }
 
-    // 3) Handle PAYMENT CAPTURED (success)
-    if (event === "payment.captured") {
-      const orderId = payload.payment.entity.order_id;
-      const paymentId = payload.payment.entity.id;
+//     // 3) Handle PAYMENT CAPTURED (success)
+//     if (event === "payment.captured") {
+//       const orderId = payload.payment.entity.order_id;
+//       const paymentId = payload.payment.entity.id;
 
-      await Order.findOneAndUpdate(
-        { razorpayOrderId: orderId },
-        {
-          status: "paid",
-          razorpayPaymentId: paymentId
-        },
-        { new: true }
-      );
+//       await Order.findOneAndUpdate(
+//         { razorpayOrderId: orderId },
+//         {
+//           status: "paid",
+//           razorpayPaymentId: paymentId
+//         },
+//         { new: true }
+//       );
 
-      console.log("Updated successful order:", orderId);
-    }
+//       console.log("Updated successful order:", orderId);
+//     }
 
-    res.status(200).json({ success: true });
-  } catch (error) {
-    console.log("Webhook Error:", error);
-    res.status(500).json({ success: false });
-  }
-};
+//     res.status(200).json({ success: true });
+//   } catch (error) {
+//     console.log("Webhook Error:", error);
+//     res.status(500).json({ success: false });
+//   }
+// };

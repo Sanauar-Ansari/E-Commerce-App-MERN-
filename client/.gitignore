@@ -1,24 +1,19 @@
-# Logs
-logs
+# Ignore node_modules in backend and frontend
+Frontend/client/node_modules/
+
+# Ignore environment files
+Frontend/client/.env
+
+# Ignore logs
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Ignore build output from React
+Frontend/client/build/
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Ignore system files
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+Thumbs.db
+
+# Ignore IDE specific files
+.vscode/
+.idea/

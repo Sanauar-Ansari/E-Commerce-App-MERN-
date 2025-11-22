@@ -13,11 +13,8 @@ import paymentRoutes from "./routes/paymentRoute.js"
 import cors from "cors"
 import cookieParser from "cookie-parser";
 
-const port =3000;
-
 
 // CORS
-// const allowedOrigins = 'https://e-commerce-app-mern-1.onrender.com || http://localhost:5173';
 const allowedOrigins = [
   'https://e-commerce-app-mern-1.onrender.com',
   'http://localhost:5173'
@@ -43,6 +40,9 @@ app.use("/api/payment", paymentRoutes);
 app.get("/",(req,res)=>{
     res.send("welcome to ecomm")
 })
+
+
+const port=process.env.PORT || 3000;
 
 app.listen(port,(err)=>{
     if(err){

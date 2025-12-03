@@ -74,12 +74,76 @@ try {
 
 
 
+// import Payment from "../models/payment.js";
+// export const createRazorpayOrder = async (req, res) => {
+//    var razorpay = new Razorpay({ key_id: 'rzp_test_RhuhcDCND55vs5', key_secret: 'ZD4e2WLNEXMwOqkuUo58pwen' })
+
+//   try {
+//     const user = await User.findById(req.user.id).populate("cart.productId");
+//     const { address } = req.body;
+
+//     if (!user || user.cart.length === 0) {
+//       return res.status(400).json({ message: "Cart empty or user not found" });
+//     }
+
+//     const totalAmount = user.cart.reduce((sum, item) => sum + item.productId.offerPrice * item.quantity,0);
+
+//     // 1) Create Order in DB
+//     const order = await Order.create({
+//       userId: user._id,
+//       items: user.cart,
+//       address,
+//       totalAmount,
+//       status: "created"
+//     });
+
+//     // 2) Create Razorpay Order
+//     const options = {
+//       amount: totalAmount,
+//       currency: "INR",
+//       receipt: `order_${order._id}`
+//     };
+
+//     const rzpOrder = await razorpay.orders.create(options);
+
+//     // 3) Create Payment Attempt Entry
+//     const payment = await Payment.create({
+//       orderId: order._id,
+//       userId: user._id,
+//       razorpayOrderId: rzpOrder.id,
+//       amount: rzpOrder.amount,
+//       currency: rzpOrder.currency,
+//       attemptNumber: 1,
+//       status: "created"
+//     });
+
+//     // 4) Link payment to Order
+//     order.razorpayOrderId = rzpOrder.id;
+//     order.payments = [payment._id];
+//     await order.save();
+
+//     res.json({
+//       success: true,
+//       rzpOrderId: rzpOrder.id,
+//       amount: rzpOrder.amount,
+//       order,
+//       payment
+//     });
+
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ error: "Order creation failed" });
+//   }
+// };
+
+
+
 export const verifyPayment=async(req,res)=>{
 try {
     // console.log(req.user.id,"iddddddddd");
      const user = await User.findById(req.user.id).populate("cart.productId");
     const {razorpay_order_id,razorpay_payment_id,razorpay_signature} = req.body;
-    console.log("razorpay_order_id", razorpay_order_id,razorpay_payment_id,razorpay_signature)
+    // console.log("razorpay_order_id", razorpay_order_id,razorpay_payment_id,razorpay_signature)
     // 1) Generate expected signature
     const sign = crypto
       .createHmac("sha256",'ZD4e2WLNEXMwOqkuUo58pwen')
@@ -109,6 +173,66 @@ try {
       res.status(500).json({ success: false, message: "Verification error", error });  
 }
 }
+
+
+// export const verifyPayment = async (req, res) => {
+//   try {
+//     const {
+//       razorpay_order_id,
+//       razorpay_payment_id,
+//       razorpay_signature,
+//       rawResponse
+//     } = req.body;
+
+//     const user = await User.findById(req.user.id);
+
+//     // Find latest payment attempt
+//     const payment = await Payment.findOne({
+//       razorpayOrderId: razorpay_order_id
+//     }).sort({ attemptNumber: -1 });
+
+//     // Validate signature
+//     const expected = crypto
+//       .createHmac("sha256", 'ZD4e2WLNEXMwOqkuUo58pwen')
+//       .update(razorpay_order_id + "|" + razorpay_payment_id)
+//       .digest("hex");
+
+//     if (expected !== razorpay_signature) {
+//       payment.status = "failed";
+//       payment.failureReason = "Signature mismatch";
+//       payment.rawResponse = rawResponse;
+//       await payment.save();
+
+//       return res.status(400).json({ message: "Payment failed" });
+//     }
+
+//     // SUCCESS
+//     payment.status = "success";
+//     payment.razorpayPaymentId = razorpay_payment_id;
+//     payment.razorpaySignature = razorpay_signature;
+//     payment.rawResponse = rawResponse;
+//     await payment.save();
+
+//     // Update Order
+//     const order = await Order.findById(payment.orderId);
+//     order.status = "paid";
+//     await order.save();
+
+//     // Clear cart
+//     user.cart = [];
+//     await user.save();
+
+//     res.json({
+//       success: true,
+//       message: "Payment verified",
+//       order,
+//       payment
+//     });
+
+//   } catch (err) {
+//     res.status(500).json({ error: "Verification failed", err });
+//   }
+// };
 
 
 

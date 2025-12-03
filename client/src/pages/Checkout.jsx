@@ -48,7 +48,7 @@ const Checkout = () => {
         {address},
         { withCredentials: true }
       );
-      console.log(data,"response amount")
+      console.log(data,"data response of create-order api")
       const options = {
         key:"rzp_test_RhuhcDCND55vs5",
         amount: data?.data?.amount*100,
@@ -64,7 +64,7 @@ const Checkout = () => {
             response,
             { withCredentials: true }
           );
-            console.log(verifyRes,"verifyRes responce after varification.")
+            console.log(verifyRes,"verifyRes responce after varification-----------.")
 
           if (verifyRes?.data?.success) {
             window.location.href = "/payment-success";
@@ -76,6 +76,7 @@ const Checkout = () => {
         prefill: {
           name: address.fullName,
           contact: address.mobile,
+          
         },
       };
 
@@ -199,3 +200,206 @@ const styles={
 
 }
 export default Checkout;
+
+
+// import React, { useContext, useState } from "react";
+// import axios from "axios";
+// import { CartContext } from "../context/CartContext";
+// import { useNavigate } from "react-router-dom";
+
+// const Checkout = () => {
+//   const { cart } = useContext(CartContext);
+//   const navigate = useNavigate();
+
+//   // Address state
+//   const [address, setAddress] = useState({
+//     fullName: "",
+//     mobile: "",
+//     houseNo: "",
+//     street: "",
+//     city: "",
+//     pincode: "",
+//   });
+
+//   const handleAddressChange = (e) => {
+//     setAddress({ ...address, [e.target.name]: e.target.value });
+//   };
+
+//   const totalAmount = cart.reduce(
+//     (sum, item) => sum + item?.productId?.offerPrice * item.quantity,
+//     0
+//   );
+
+//   // Load Razorpay script
+//   const loadRazorpay = () => {
+//     return new Promise((resolve) => {
+//       const script = document.createElement("script");
+//       script.src = "https://checkout.razorpay.com/v1/checkout.js";
+//       script.onload = () => resolve(true);
+//       script.onerror = () => resolve(false);
+//       document.body.appendChild(script);
+//     });
+//   };
+
+//   const handlePayment = async () => {
+//     const loaded = await loadRazorpay();
+//     if (!loaded) return alert("Razorpay failed to load");
+
+//     try {
+//       // 1️⃣ Create Razorpay Order from backend
+//       const { data } = await axios.post(
+//         `${import.meta.env.VITE_BACKEND_URL}/api/payment/create-order`,
+//         { address },
+//         { withCredentials: true }
+//       );
+
+//       console.log("Backend order:", data);
+
+//       const options = {
+//         key: import.meta.env.VITE_RAZORPAY_KEY_ID, // Better to store in env
+//         amount: data.amount,      // already in paise from backend
+//         currency: "INR",
+//         name: "E-Commerce Store",
+//         description: "Order Payment",
+//         order_id: data.orderId,   // Razorpay Order ID
+
+//         handler: async function (response) {
+//           console.log("Razorpay handler:", response);
+
+//           const verifyRes = await axios.post(
+//             `${import.meta.env.VITE_BACKEND_URL}/api/payment/verify-payment`,
+//             response,
+//             { withCredentials: true }
+//           );
+
+//           console.log("Verify result:", verifyRes.data);
+
+//           if (verifyRes.data.success) {
+//             navigate("/payment-success");
+//           } else {
+//             alert("Payment verification failed");
+//           }
+//         },
+
+//         prefill: {
+//           name: address.fullName,
+//           contact: address.mobile,
+//         },
+//       };
+
+//       const paymentObject = new window.Razorpay(options);
+//       paymentObject.open();
+//     } catch (err) {
+//       console.error(err);
+//       alert("Payment error");
+//     }
+//   };
+
+//   return (
+//     <>
+//       <div className="flex align-center justify-end">
+//         {/* ORDER SUMMARY */}
+//         <div style={{ width: "65%" }}>
+//           <h3>Order Summary</h3>
+
+//           {cart.map((i) => (
+//             <div key={i.productId._id} style={{ marginBottom: "10px" }}>
+//               {i.productId.name} × {i.quantity} — ₹{i.productId.offerPrice}
+//             </div>
+//           ))}
+
+//           <h3>Total Amount: ₹{totalAmount}</h3>
+//         </div>
+
+//         {/* ADDRESS FORM */}
+//         <div>
+//           <h3>Shipping Address</h3>
+
+//           {cart.length > 0 && (
+//             <div style={styles.addressBox}>
+//               <input
+//                 name="fullName"
+//                 placeholder="Full Name"
+//                 value={address.fullName}
+//                 onChange={handleAddressChange}
+//                 style={styles.input}
+//               />
+
+//               <input
+//                 name="mobile"
+//                 placeholder="Mobile Number"
+//                 value={address.mobile}
+//                 onChange={handleAddressChange}
+//                 style={styles.input}
+//               />
+
+//               <input
+//                 name="houseNo"
+//                 placeholder="House No"
+//                 value={address.houseNo}
+//                 onChange={handleAddressChange}
+//                 style={styles.input}
+//               />
+
+//               <input
+//                 name="street"
+//                 placeholder="Street"
+//                 value={address.street}
+//                 onChange={handleAddressChange}
+//                 style={styles.input}
+//               />
+
+//               <input
+//                 name="city"
+//                 placeholder="City"
+//                 value={address.city}
+//                 onChange={handleAddressChange}
+//                 style={styles.input}
+//               />
+
+//               <input
+//                 name="pincode"
+//                 placeholder="Pincode"
+//                 value={address.pincode}
+//                 onChange={handleAddressChange}
+//                 style={styles.input}
+//               />
+
+//               <button onClick={handlePayment} style={styles.orderBtn}>
+//                 Place Order
+//               </button>
+//             </div>
+//           )}
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
+
+// const styles = {
+//   addressBox: {
+//     width: "35%",
+//     padding: "20px",
+//     border: "1px solid #ddd",
+//     borderRadius: 10,
+//     height: "fit-content",
+//   },
+//   input: {
+//     width: "100%",
+//     padding: "10px",
+//     marginBottom: "10px",
+//     borderRadius: 6,
+//     border: "1px solid #ccc",
+//   },
+//   orderBtn: {
+//     width: "100%",
+//     background: "green",
+//     padding: "15px",
+//     borderRadius: "10px",
+//     border: "none",
+//     color: "white",
+//     fontSize: "20px",
+//   },
+// };
+
+// export default Checkout;

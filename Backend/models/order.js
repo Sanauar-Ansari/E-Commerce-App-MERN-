@@ -26,7 +26,12 @@ const orderSchema = new mongoose.Schema({
   razorpayOrderId:{type:String},   // razorpay order id (r_order_xxx)
   razorpayPaymentId: {type:String}, // razorpay payment id after successful pay
   razorpaySignature: {type:String}, // signature returned by razorpay (optional store)
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+
+// added this payment schema to order.
+  payments: [
+   { type: mongoose.Schema.Types.ObjectId, ref: "Payment" }
+],
 });
 
 

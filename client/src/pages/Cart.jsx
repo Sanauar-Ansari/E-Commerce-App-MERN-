@@ -27,17 +27,17 @@ const Cart = () => {
   console.log(cart,"carttttt")
 
   // PLACE ORDER FUNCTION
-  const placeOrder = async () => {
-    try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/payment/create-order`,{address},{withCredentials: true });
-      alert("Order placed successfully!");
-      console.log(res)
-    } catch (err) {
-      console.log(err.response?.data);
-      alert("Order failed");
-    }
-  };
+  // const placeOrder = async () => {
+  //   try {
+  //     const res = await axios.post(
+  //       `${import.meta.env.VITE_BACKEND_URL}/api/payment/create-order`,{address},{withCredentials: true });
+  //     alert("Order placed successfully!");
+  //     console.log(res)
+  //   } catch (err) {
+  //     console.log(err.response?.data);
+  //     alert("Order failed");
+  //   }
+  // };
 
   return (
     <>
